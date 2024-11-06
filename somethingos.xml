@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+	<!-- somethingosOS Manifest -->
+	<remove-project name="AOSPA/manifest" />
+  <project path="manifest" name="android_manifest" remote="somethingos" />
+
+	<!-- Frameworks -->
+	<remove-project name="AOSPA/android_frameworks_base" />
+	<project path="frameworks/base" name="android_frameworks_base" remote="somethingos" />
+	<remove-project name="AOSPA/android_frameworks_av" />
+	<project path="frameworks/av" name="android_frameworks_av" remote="somethingos" />
+
+	<!-- Vendor -->
+	<remove-project name="AOSPA/android_vendor_aospa" />
+	<project path="vendor/aospa" name="android_vendor_aospa" remote="somethingos">
+		<linkfile src="build.sh" dest="rom-build.sh" />
+	</project>
+	<remove-project name="android_vendor_aospa_prebuilt" />
+	<project path="vendor/aospa/prebuilt" name="android_vendor_aospa_prebuilt" remote="somethingos" />
+
+	<!-- Packages -->
+	<remove-project name="platform/packages/apps/Settings" />
+	<project path="packages/apps/Settings" name="android_packages_apps_Settings" remote="somethingos" />
+	<project path="packages/apps/SomethingSettings" name="android_packages_apps_SomethingSettings" remote="somethingos" />
+	<remove-project name="AOSPA/android_packages_apps_Paranoid_SystemUI" />
+	<project path="packages/apps/ParanoidSystemUI" name="android_packages_apps_Paranoid_SystemUI" remote="somethingos" />
+
+	<remove-project name="AOSPA/android_bionic" />
+  	<project path="bionic" name="android_bionic" remote="somethingos" />
+	<remove-project name="AOSPA/android_system_core" />
+  	<project path="system/core" name="android_system_core" remote="somethingos" />
+
+</manifest>
