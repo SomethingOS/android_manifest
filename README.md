@@ -1,9 +1,9 @@
-# Paranoid Android #
+# SomethingOS #
 
 ## Setting up your machine ##
 
 You must be running a 64-bit Linux distribution and must have installed some packages to build
-Paranoid Android. Google recommends using [Ubuntu](http://www.ubuntu.com/download/desktop) for
+SomethingOS. Google recommends using [Ubuntu](http://www.ubuntu.com/download/desktop) for
 this and provides instructions for setting up the system (with Ubuntu-specific commands) on
 [the Android Open Source Project website](https://source.android.com/source/initializing.html#setting-up-a-linux-build-environment).
 
@@ -33,15 +33,13 @@ $ chmod a+x ~/.bin/repo
 
 ```bash
 # Create a directory for the source files
-# You can name this directory however you want, just remember to replace
-# WORKSPACE with your directory for the rest of this guide.
 # This can be located anywhere (as long as the fs is case-sensitive)
-$ mkdir WORKSPACE
-$ cd WORKSPACE
+$ mkdir SomethingOS
+$ cd SomethingOS
 
 # Install Repo in the created directory
 # Use a real name/email combination, if you intend to submit patches
-$ repo init -u https://github.com/AOSPA/manifest -b vauxite
+$ repo init -u https://github.com/SomethingOS/android_manifest -b vauxite
 ```
 
 ### Downloading the source tree ###
@@ -69,11 +67,28 @@ a large change that spans across multiple projects.
 ```bash
 # Specify one or more projects by either name or path
 
-# For example, enter AOSPA/android_frameworks_base or
+# For example, enter SomethingOS/android_frameworks_base or
 # frameworks/base to sync the frameworks/base repository
 
 $ repo sync PROJECT
 ```
+
+## Generating your sign keys ##
+
+For official, please use [the SomethingOS keys](https://github.com/SomethingOS/android_vendor_something_keys)
+
+From [Android Documentation](https://source.android.com/docs/core/ota/sign_builds?hl=en#:~:text=the%20test%2Dkeys%20are,you%20have%20access%20to.) :
+> Since the test-keys are publicly known, anybody can sign their own .apk files with the same keys, which may allow them to replace or hijack system apps built into your OS image. For this reason it is critical to sign any publicly released or deployed Android OS image with a special set of release-keys that only you have access to.
+
+Start from your working directory and generate the keys:
+```
+mkdir ~/.android-certs
+subject='/C=FR/ST=Whatever/L=Somewhere/O=SomethingOS/OU=SomethingOS/CN=SomethingOS/emailAddress=android@somethingos.com'
+for x in releasekey platform shared media networkstack; do \
+    ./development/tools/make_key ~/.android-certs/$x "$subject"; \
+  done
+```
+And this will create the signing keys
 
 ## Building ##
 
@@ -81,96 +96,16 @@ The bundled builder tool `./rom-build.sh` handles all the building steps for the
 automatically. As the device value, you just feed it with the device codename (for example,
 'beryllium' for the Pocophone F1).
 
+-z : Will also generate a fastboot package\
+-s ~/.android-certs/ : Will use your sign keys
+
+
 ```bash
 # Go to the root of the source tree...
 $ cd WORKSPACE
 # ...and run the builder tool.
-$ ./rom-build.sh DEVICE
+$ ./rom-build.sh DEVICE -z -s {keys_folder}
 ```
-
-## Submitting Patches ##
-
-We're open source and patches are always welcome!
-
-You can see the status of all patches at [Gerrit Code Review](https://gerrit.aospa.co/).
-
-### Following the standard workflow ###
-
-```bash
-# Start by going to the root of the source tree
-$ cd WORKSPACE
-
-# Create a new branch on the specific project you are going to work on
-# For example, `repo start fix-clock AOSPA/android_frameworks_base`
-$ repo start BRANCH AOSPA/PROJECT
-# You can also use the project path in place of the project name.
-# The PROJECT_DIR is the portion after the android_ prefix on
-# the AOSPA Github.  For example, android_frameworks_base translates
-# into the directory frameworks/base.
-# This applies to all repo commands that reference projects.
-$ repo start BRANCH PROJECT_DIR
-
-# Go inside the project you are working on
-$ cd PROJECT_DIR
-
-# Make your changes
-...
-
-# Commit all your changes
-$ git add -A
-$ git commit -a -s
-
-# Upload your changes
-$ cd WORKSPACE
-$ repo upload AOSPA/PROJECT
-# or
-$ repo upload PROJECT_DIR
-```
-### Using plain git to upload ###
-
-```bash
-# Go inside the project you are working on
-$ cd PROJECT_DIR
-
-# Make your changes
-...
-
-# Commit all your changes
-$ git add -A
-$ git commit -a -s
-
-# Upload your changes
-$ git push ssh://USERNAME@gerrit.aospa.co:29418/AOSPA/PROJECT HEAD:refs/for/vauxite
-```
-
-### Extra commands for Gerrit ###
-
-```bash
-# If you desire to upload a change as private use the below command
-$ git push ssh://USERNAME@gerrit.aospa.co:29418/AOSPA/PROJECT HEAD:refs/for/vauxite%private
-
-# If you desire to upload a change as W.I.P(Work in Progress) use the below command
-$ git push ssh://USERNAME@gerrit.aospa.co:29418/AOSPA/PROJECT HEAD:refs/for/vauxite%wip
-
-# After that, if you want to make the commit public you can use the UI tools on AOSPA Gerrit website, or use the below command
-$ git push ssh://USERNAME@gerrit.aospa.co:29418/AOSPA/PROJECT HEAD:refs/for/vauxite%remove-private
-
-# If you want to unset the W.I.P status on your commit, you can use UI tools on AOSPA Gerrit website, or use the below command
-$ git push ssh://USERNAME@gerrit.aospa.co:29418/AOSPA/PROJECT HEAD:refs/for/vauxite%ready
-```
-
-### Making additional changes ###
-
-If you are going to make more changes, you just have to repeat the steps (except for `repo start`
-which you should not repeat) while using `git commit --amend` instead of `git commit -a -s` so that
-you avoid having multiple commits for this single change. Gerrit will then recognize these changes
-as a new patch set and figure out everything for you when you upload.
-
-### Squashing multiple commits ###
-
-Your patches should be single commits. If you have multiple commits laying around, squash them by
-running `git rebase -i HEAD~<commit-count>` before uploading.
-
 ### Writing good commit messages ###
 
 You will be asked a commit message when you run `git commit`. Writing a good commit message is
@@ -183,15 +118,6 @@ imperative as it matches the style used by the `git merge` and `git revert` comm
 first line of the commit message as a summary of the commit. It should always be capitalized and
 followed by an empty line. You might optionally include the project name at the start and try to
 keep it to 50 characters when possible as it is used in various logs, including "one line" logs.
-
-## Working on translations ##
-
-If you want to help on translating PA to your desired language(s), you can use Crowdin
-which provides an easy interface to submit translations.
-
-For accessing PA´s Crowdin, visit http://crowdin.aospa.co.
-
-## Using our assets ##
 
 ### Code ###
 
@@ -209,7 +135,7 @@ This means that you are allowed to modify the aforementioned assets in any way y
 you are free to share the originals and/or the modified work. However, you are not allowed
 to use the assets for commercial purposes and you must provide attribution at all times which
 means you have to include a short note about the license used (CC BY-NC 4.0), the original
-author/authors (Paranoid Android Project or AOSPA) and inform about any changes that have been
+author/authors (Paranoid Android Project or AOSPA - which SomethingOS is based on) and inform about any changes that have been
 made. A link to the [website](http://aospa.co/) should usually be included as well.
 
 You can reach the full legal text at http://creativecommons.org/licenses/by-nc/4.0/

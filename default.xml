@@ -20,6 +20,11 @@
   <include name="system.xml"/>
   <include name="vendor.xml"/>
 
+  <!-- SomethingOS -->
+  <remote  name="somethingos"
+           fetch="https://github.com/SomethingOS/"
+           revision="vauxite" />
+
   <!-- AOSPA -->
   <remote  name="aospa"
            fetch=".."
@@ -49,6 +54,7 @@
 
   <include name="aosp.xml"/>
   <include name="aospa.xml"/>
+  <include name="somethingos.xml"/>
   <include name="obsolete.xml"/>
 
 </manifest>
