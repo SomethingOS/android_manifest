@@ -3,7 +3,7 @@
 
 	<!-- somethingosOS Manifest -->
 	<remove-project name="AOSPA/manifest" />
-  <project path="manifest" name="android_manifest" remote="somethingos" />
+  	<project path="manifest" name="android_manifest" remote="somethingos" />
 
 	<!-- Frameworks -->
 	<remove-project name="AOSPA/android_frameworks_base" />
@@ -18,6 +18,8 @@
 	</project>
 	<remove-project name="android_vendor_aospa_prebuilt" />
 	<project path="vendor/aospa/prebuilt" name="android_vendor_aospa_prebuilt" remote="somethingos" />
+	<remove-project name="android_vendor_google_gms" />
+	<project path="vendor/google/gms" name="android_vendor_google_gms" remote="somethinglab" />
 
 	<!-- Packages -->
 	<remove-project name="platform/packages/apps/Settings" />
