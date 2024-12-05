@@ -25,6 +25,10 @@
            fetch="https://github.com/SomethingOS/"
            revision="vauxite" />
 
+  <remote name="somethinglab"
+          fetch="https://gitlab.com/SomethingOS/"
+          revision="vauxite" />
+
   <!-- AOSPA -->
   <remote  name="aospa"
            fetch=".."
