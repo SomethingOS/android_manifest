@@ -89,10 +89,6 @@
   <project path="packages/apps/ParanoidSystemUI" name="AOSPA/android_packages_apps_Paranoid_SystemUI" remote="aospa" />
   <project path="packages/resources/devicesettings" name="AOSPA/android_packages_resources_devicesettings" remote="aospa" />
 
-  <!-- Packages -->
-  <remove-project name="platform/packages/apps/Settings" />
-  <project path="packages/apps/Settings" name="AOSPA/android_packages_apps_Settings" remote="aospa" />
-
   <!-- Prebuilts (AOSPA) -->
   <project path="prebuilts/extract-tools" name="AOSPA/android_prebuilts_extract-tools" remote="aospa" />
 
