@@ -27,6 +27,8 @@
 	<project path="packages/apps/SomethingSettings" name="android_packages_apps_SomethingSettings" remote="somethingos" />
 	<remove-project name="AOSPA/android_packages_apps_Paranoid_SystemUI" />
 	<project path="packages/apps/ParanoidSystemUI" name="android_packages_apps_Paranoid_SystemUI" remote="somethingos" />
+	<remove-project name="AOSPA/android_packages_apps_ParanoidSettings" />
+	<project path="packages/apps/ParanoidSettings" name="android_packages_apps_ParanoidSettings" remote="somethingos" />
 
 	<remove-project name="AOSPA/android_bionic" />
   	<project path="bionic" name="android_bionic" remote="somethingos" />
